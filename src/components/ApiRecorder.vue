@@ -5,6 +5,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 defineProps<{
   isRunning: boolean;
+  _paq: []
 }>()
 
 // Declare a variable to hold the jsonSchema
@@ -12,7 +13,7 @@ let jsonSchema: any;
 
 // Initialize the tracking status as false
 const isTracking = ref(false);
-
+console.log("library")
 declare var _paq: any;
 
 // Function to toggle the tracking status

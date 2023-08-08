@@ -27,12 +27,11 @@
     "preview": "vite preview",
     "test": "exit 0"
   },
-  "name": "api-tracker",
-  "private": true,
+  "name": "@charuka-rathnayaka/api-tracker",
   "version": "0.0.0",
   "type": "module",
-
   "dependencies": {
+    "axios": "^1.4.0",
     "vue": "^3.3.4"
   },
   "devDependencies": {

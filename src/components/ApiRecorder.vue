@@ -14,7 +14,6 @@ let jsonSchema: any;
 // Initialize the tracking status as false
 const isTracking = ref(false);
 console.log("library")
-declare var _paq: any;
 
 // Function to toggle the tracking status
 const toggleTracking = () => {

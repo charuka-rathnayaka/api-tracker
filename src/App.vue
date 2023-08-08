@@ -15,7 +15,8 @@ async function getIpAddress() {
 }
 
 const ipAddress = ref(''); // Store the IP address
-const _paq = window._paq;
+declare var _paq: any;
+_paq = window._paq;
 console.log("paq",_paq)
 
 // Function to handle button click

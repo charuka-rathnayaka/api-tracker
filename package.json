@@ -1,0 +1,45 @@
+{
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/api-tracker.umd.js",
+  "module": "./dist/api-tracker.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/api-tracker.es.js",
+      "require": "./dist/api-tracker.umd.js"
+    }
+  },
+  "types": "./dist/types/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@charuka-rathnayaka"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/charuka-rathnayaka/api-tracker"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vue-tsc --emitDeclarationOnly && mv dist/src dist/types",
+    "preserve": "vite build",
+    "serve": "vite preview --port 5050",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview",
+    "test": "exit 0"
+  },
+  "name": "api-tracker",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+
+  "dependencies": {
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.0.0",
+    "vue-tsc": "^1.0.11"
+  }
+}

@@ -5,7 +5,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 defineProps<{
   isRunning: boolean;
-  _paq: []
+  _paq: any[]
 }>()
 
 // Declare a variable to hold the jsonSchema

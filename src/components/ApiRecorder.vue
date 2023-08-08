@@ -13,6 +13,8 @@ let jsonSchema: any;
 // Initialize the tracking status as false
 const isTracking = ref(false);
 
+declare var _paq: any;
+
 // Function to toggle the tracking status
 const toggleTracking = () => {
   isTracking.value = !isTracking.value;
@@ -44,7 +46,7 @@ function clearAndGenerateSchema(jsonObject: Record<string, any>): Record<string,
 axios.interceptors.request.use(
   (config) => {
     // Execute the interceptor logic only when isTracking is true
-    if (isTracking.value) {
+    if (isTracking.value && config.url) {
       console.log("Request is being sent:", config.method?.toUpperCase(), config.url);
       console.log("Request data:", config.data); // requestBody
       const excluded_endpoints = ['http://localhost:3000/test', 'https://api64.ipify.org?format=json'];
@@ -52,10 +54,10 @@ axios.interceptors.request.use(
       // Regular expression to match URLs with IDs at the end
       const idPattern = /\/[a-f\d]{24}$/i; // Assuming IDs are 24 characters hexadecimal
       
-      const possibleId = config.url.split("/").pop();
+      const possibleId = config.url?config.url.split("/").pop():"";
       // console.log("possible ", possibleId, possibleId.match(idPattern));
       
-      if (!excluded_endpoints.includes(config.url)) {
+      if (!excluded_endpoints.includes(config.url?config.url:"")) {
         console.log("calling interceptor");
         
         if (config.url.match(idPattern)) {

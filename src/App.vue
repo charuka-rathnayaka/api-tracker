@@ -3,6 +3,6 @@ import { ApiRecorder } from "./index";
 </script>
 
 <template>
-  <ApiRecorder> Start recording </ApiRecorder>
+  <ApiRecorder :isRunning="false"/>
 </template>
 

@@ -29,10 +29,13 @@ const toggleTracking = () => {
 };
 
 const showModal = () => {
+  console.log("showModal", showSessionModal.value)
   if(isTracking.value==false){
     showSessionModal.value = true;
+    console.log("if", showSessionModal.value)
   }else{
     isTracking.value = false;
+    console.log("else", showSessionModal.value)
   }
 };
 
@@ -146,14 +149,14 @@ const handleStartSession = async (sessionName: string) => {
       </div>
     </div>
   </div>
-  <Teleport to="body">
+  <!-- <Teleport to="body"> -->
     <!-- use the modal component, pass in the prop -->
     <Modal :show="showSessionModal" @start-session="handleStartSession">
       <template #header>
         <h3>custom header</h3>
       </template>
     </Modal>
-  </Teleport>
+  <!-- </Teleport> -->
   </div>
 </template>
 

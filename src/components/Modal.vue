@@ -1,28 +1,29 @@
 <script setup lang="ts">
-  import { ref, onBeforeMount } from 'vue';
+  import { ref, onBeforeMount  } from 'vue';
 
+  const props = defineProps<{
+    show: Boolean,
+
+  }>()
+
+
+  const emit = defineEmits();
   const sessionName = ref('');
+
   const loadingData = ref(false);
 
   const startSession = () => {
     // Emit the sessionName to the parent component
+
     emit('start-session', sessionName.value);
   };
 </script>
-<script lang="ts">
-  import { defineProps, defineEmits } from 'vue';
 
-  const { show } = defineProps({
-    show: Boolean,
-  });
-
-  const emit = defineEmits();
-</script>
 
 
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask">
+    <div v-if="props.show" class="modal-mask">
       <div class="modal-container" style="max-height: 80vh; overflow-y: auto;">
         <div class="modal-header">
           <h3>Track API Activities</h3>

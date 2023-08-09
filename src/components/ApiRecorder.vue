@@ -1,7 +1,8 @@
 
 <script setup lang="ts">
-import { ref, computed, watch ,onMounted } from 'vue';
+import { ref, computed, watch ,onMounted,provide } from 'vue';
 // import axios from 'axios';
+import Modal from './Modal.vue';
 
 onMounted(() => {
   console.log("component is created")
@@ -18,10 +19,21 @@ let jsonSchema: any;
 console.log("published library")
 // Initialize the tracking status as false
 const isTracking = ref(false);
+const showSessionModal = ref(false);
+const localSessionName = ref('');
 
 // Function to toggle the tracking status
 const toggleTracking = () => {
   isTracking.value = !isTracking.value;
+  
+};
+
+const showModal = () => {
+  if(isTracking.value==false){
+    showSessionModal.value = true;
+  }else{
+    isTracking.value = false;
+  }
 };
 
 function clearAndGenerateSchema(jsonObject: Record<string, any>): Record<string, any> {
@@ -112,17 +124,37 @@ const buttonText = computed(() => {
   return isTracking.value ? "Stop Tracking" : "Track Tasks";
 });
 
+const handleStartSession = async (sessionName: string) => {
+    console.log('Starting session with name:', sessionName);
+    localSessionName.value = sessionName;
+    await props.changePaqObject(['setUserId', sessionName]);
+    showSessionModal.value = false;
+    isTracking.value = true;
+  };
+
+
+
 
 </script>
 
 <template>
-<div class="bottom-right-button">
-  <div class="api-tracker-container">
-    <div class="topMenu">
-      <button @click="toggleTracking" :class="['toggleButton', { active: isTracking }]">{{ buttonText }}</button>
+<div>
+  <div class="bottom-right-button">
+    <div class="api-tracker-container">
+      <div class="topMenu">
+        <button @click="showModal" :class="['toggleButton', { active: isTracking }]">{{ buttonText }}</button>
+      </div>
     </div>
   </div>
-</div>
+  <Teleport to="body">
+    <!-- use the modal component, pass in the prop -->
+    <Modal :show="showSessionModal" @start-session="handleStartSession">
+      <template #header>
+        <h3>custom header</h3>
+      </template>
+    </Modal>
+  </Teleport>
+  </div>
 </template>
 
 <style scoped>

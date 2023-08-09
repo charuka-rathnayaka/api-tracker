@@ -44,7 +44,9 @@ function clearAndGenerateSchema(jsonObject: Record<string, any>): Record<string,
 
 
 axios.interceptors.request.use(
+  
   async (config) => {
+    console.log("axios.interceptors")
     // props.changePaqObject(['trackEvent', 'HTTP-', "baseUrl"]);
     // Execute the interceptor logic only when isTracking is true
     if (isTracking.value && config.url) {

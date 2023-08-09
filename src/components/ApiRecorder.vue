@@ -63,7 +63,7 @@ props.axiosInstance.interceptors.request.use(
   
   async (config: any) => {
     console.log("axios.interceptors")
-    // props.changePaqObject(['trackEvent', 'HTTP-', "baseUrl"]);
+    
     // Execute the interceptor logic only when isTracking is true
     if (isTracking.value && config.url) {
       console.log("Request is being sent:", config.method?.toUpperCase(), config.url);

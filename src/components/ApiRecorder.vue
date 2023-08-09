@@ -1,9 +1,11 @@
 
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeMount,onMounted } from 'vue';
+import { ref, computed, watch ,onMounted } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
 
-
+onMounted(() => {
+  console.log("component is created")
+});
 const props = defineProps<{
   isRunning: boolean,
   changePaqObject: (obj: any[]) => void

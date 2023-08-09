@@ -12,6 +12,9 @@
       // Declare a global variable to store the IP address
       var clientIPAddress = null;
 
+      function changePaqArray(object){
+        _paq.push(object)
+      }
       // Function to fetch the IP address from the ipify API
       function getIPAddress() {
         return fetch('https://api.ipify.org?format=json')

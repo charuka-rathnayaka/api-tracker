@@ -1,11 +1,12 @@
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch, onBeforeMount,onMounted } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
 
-defineProps<{
-  isRunning: boolean;
-  _paq: any[]
+
+const props = defineProps<{
+  isRunning: boolean,
+  changePaqObject: (obj: any[]) => void
 }>()
 
 // Declare a variable to hold the jsonSchema
@@ -13,7 +14,6 @@ let jsonSchema: any;
 
 // Initialize the tracking status as false
 const isTracking = ref(false);
-console.log("library")
 
 // Function to toggle the tracking status
 const toggleTracking = () => {
@@ -44,12 +44,14 @@ function clearAndGenerateSchema(jsonObject: Record<string, any>): Record<string,
 
 
 axios.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    // props.changePaqObject(['trackEvent', 'HTTP-', "baseUrl"]);
     // Execute the interceptor logic only when isTracking is true
     if (isTracking.value && config.url) {
       console.log("Request is being sent:", config.method?.toUpperCase(), config.url);
       console.log("Request data:", config.data); // requestBody
-      const excluded_endpoints = ['http://localhost:3000/test', 'https://api64.ipify.org?format=json'];
+      // const excluded_endpoints = ['http://localhost:3000/test', 'https://api64.ipify.org?format=json'];
+      const excluded_endpoints = ['http://localhost:3000/test'];
 
       // Regular expression to match URLs with IDs at the end
       const idPattern = /\/[a-f\d]{24}$/i; // Assuming IDs are 24 characters hexadecimal
@@ -68,10 +70,10 @@ axios.interceptors.request.use(
 
           if (config.data) {
             jsonSchema = clearAndGenerateSchema(config.data);
-            _paq.push(['trackEvent', 'HTTP-' + config.method, baseUrl, JSON.stringify(jsonSchema)]);
+            props.changePaqObject(['trackEvent', 'HTTP-' + config.method, baseUrl, JSON.stringify(jsonSchema)]);
             return config;
           } else {
-            _paq.push(['trackEvent', 'HTTP-' + config.method, baseUrl]);
+            await props.changePaqObject(['trackEvent', 'HTTP-' + config.method, baseUrl]);
             return config;
           }
         } else {
@@ -79,10 +81,10 @@ axios.interceptors.request.use(
           // URL does not contain an ID
           if (config.data) {
             jsonSchema = clearAndGenerateSchema(config.data);
-            _paq.push(['trackEvent', 'HTTP-' + config.method, config.url, JSON.stringify(jsonSchema)]);
+            await props.changePaqObject(['trackEvent', 'HTTP-' + config.method, config.url, JSON.stringify(jsonSchema)]);
             return config;
           } else {
-            _paq.push(['trackEvent', 'HTTP-' + config.method, config.url]);
+            await props.changePaqObject(['trackEvent', 'HTTP-' + config.method, config.url]);
             return config;
           }
         }
@@ -103,16 +105,6 @@ axios.interceptors.request.use(
 const buttonText = computed(() => {
   return isTracking.value ? "Stop Tracking API" : "Track API Request";
 });
-
-
-
-interface ApiData {
-  id: number;
-  name: string;
-  description: string;
-}
-
-
 
 
 </script>

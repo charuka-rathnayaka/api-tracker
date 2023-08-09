@@ -15,13 +15,14 @@ async function getIpAddress() {
 }
 
 const ipAddress = ref(''); // Store the IP address
-declare var _paq: any[];
-_paq = window._paq;
-console.log("paq",_paq)
 
-// Function to handle button click
 async function fetchIpAddress() {
   ipAddress.value = await getIpAddress();
+}
+declare function changePaqArray(object: any): void;
+async function changePaqObject(obj: any[]) {
+  changePaqArray(obj)
+  return
 }
 </script>
 
@@ -29,6 +30,7 @@ async function fetchIpAddress() {
   <div>
     <button @click="fetchIpAddress">Fetch IP Address</button>
     <p>IP Address: {{ ipAddress }}</p>
-    <ApiRecorder :isRunning="false" :_paq="_paq"/>
+    <ApiRecorder :isRunning="false" :changePaqObject="changePaqObject" />
+     <!-- <p v-else>_paq object is not available yet</p> -->
   </div>
 </template>

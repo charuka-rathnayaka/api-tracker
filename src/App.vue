@@ -30,7 +30,7 @@ async function changePaqObject(obj: any[]) {
   <div>
     <button @click="fetchIpAddress">Fetch IP Address</button>
     <p>IP Address: {{ ipAddress }}</p>
-    <ApiRecorder :isRunning="false" :changePaqObject="changePaqObject" />
+    <ApiRecorder :isRunning="false" :changePaqObject="changePaqObject" :axiosInstance="axios"/>
      <!-- <p v-else>_paq object is not available yet</p> -->
   </div>
 </template>

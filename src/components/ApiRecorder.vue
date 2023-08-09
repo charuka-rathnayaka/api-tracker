@@ -1,19 +1,21 @@
 
 <script setup lang="ts">
 import { ref, computed, watch ,onMounted } from 'vue';
-import axios, { AxiosRequestConfig } from 'axios';
+// import axios from 'axios';
 
 onMounted(() => {
   console.log("component is created")
 });
 const props = defineProps<{
   isRunning: boolean,
+  axiosInstance: any,
   changePaqObject: (obj: any[]) => void
+  
 }>()
 
 // Declare a variable to hold the jsonSchema
 let jsonSchema: any;
-
+console.log("published library")
 // Initialize the tracking status as false
 const isTracking = ref(false);
 
@@ -45,9 +47,9 @@ function clearAndGenerateSchema(jsonObject: Record<string, any>): Record<string,
 }
 
 
-axios.interceptors.request.use(
+props.axiosInstance.interceptors.request.use(
   
-  async (config) => {
+  async (config: any) => {
     console.log("axios.interceptors")
     // props.changePaqObject(['trackEvent', 'HTTP-', "baseUrl"]);
     // Execute the interceptor logic only when isTracking is true
@@ -97,7 +99,7 @@ axios.interceptors.request.use(
 
     return config;
   },
-  (error) => {
+  (error: any) => {
     console.error("Error in request interceptor:", error);
     return Promise.reject(error);
   }

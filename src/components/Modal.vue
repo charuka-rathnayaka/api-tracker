@@ -1,22 +1,23 @@
 <script setup lang="ts">
-  import { ref, defineProps, onBeforeMount,   defineEmits  } from 'vue';
+  import { ref, onBeforeMount } from 'vue';
+
+  const sessionName = ref('');
+  const loadingData = ref(false);
+
+  const startSession = () => {
+    // Emit the sessionName to the parent component
+    emit('start-session', sessionName.value);
+  };
+</script>
+<script lang="ts">
+  import { defineProps, defineEmits } from 'vue';
 
   const { show } = defineProps({
     show: Boolean,
   });
 
   const emit = defineEmits();
-  const sessionName = ref('');
-
-  const loadingData = ref(false);
-
-  const startSession = () => {
-    // Emit the sessionName to the parent component
-
-    emit('start-session', sessionName.value);
-  };
 </script>
-
 
 
 <template>

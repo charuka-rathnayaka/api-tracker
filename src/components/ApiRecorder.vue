@@ -103,7 +103,7 @@ axios.interceptors.request.use(
 
 // Computed property to set the button text based on isTracking
 const buttonText = computed(() => {
-  return isTracking.value ? "Stop Tracking API" : "Track API Request";
+  return isTracking.value ? "Stop Tracking" : "Track Tasks";
 });
 
 

@@ -1,22 +1,30 @@
 <script setup lang="ts">
-  import { ref, onBeforeMount  } from 'vue';
+import { ref } from 'vue';
 
-  const props = defineProps<{
-    show: Boolean,
+const props = defineProps<{
+  show: Boolean,
+}>()
 
-  }>()
+const emit = defineEmits();
+const sessionName = ref('');
+const loadingData = ref(false);
+const errorMessage = ref('');
+const isPopoverVisible = ref(false);
 
+const startSession = () => {
+  if (sessionName.value.trim().length === 0) {
+    errorMessage.value = 'Session name cannot be empty';
+    isPopoverVisible.value = true;
+    return; // Don't proceed if validation fails
+  }
 
-  const emit = defineEmits();
-  const sessionName = ref('');
+  // Emit the sessionName to the parent component
+  emit('start-session', sessionName.value);
+};
 
-  const loadingData = ref(false);
-
-  const startSession = () => {
-    // Emit the sessionName to the parent component
-
-    emit('start-session', sessionName.value);
-  };
+const cancelSession = () => {
+  emit('cancel-session'); // Emit an event to close the modal
+};
 </script>
 
 
@@ -30,23 +38,24 @@
         </div>
 
         <div class="modal-body">
-            <label for="session-name" :style="{ marginRight: '30px' }">Session Name:</label>
+          <div class="form-group">
+            <label for="session-name">Session Name:</label>
             <input v-model="sessionName" id="session-name" type="text" />
+          </div>
+          <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
         </div>
-
+        
         <div class="modal-footer">
           <slot name="footer">
-
-            <button
-              class="modal-default-button"
-              @click="startSession"
-            >Start Session</button>
+            <button class="modal-cancel-button" @click="cancelSession">Cancel</button>
+            <button class="modal-default-button" @click="startSession">Start Session</button>
           </slot>
         </div>
       </div>
     </div>
   </Transition>
 </template>
+
 
 <style>
 .modal-mask {
@@ -74,10 +83,12 @@
 .modal-header h3 {
   margin-top: 0;
   color: #42b983;
+  text-align: left; /* Align the header to the left */
 }
 
 .modal-body {
   margin: 20px 0;
+  margin-bottom: 30px;
 }
 
 .modal-default-button {
@@ -89,18 +100,6 @@
   cursor: pointer;
   float: right;
 }
-table {
-  width: 100%;
-}
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
 
 .modal-enter-from {
   opacity: 0;
@@ -115,44 +114,43 @@ table {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
-.table-heading {
-  background-color: #f2f2f2;
-  font-weight: bold;
-  padding: 8px;
-}
-.table-h {
-  margin: 10px;
-  text-align: center;
-}
 
-.table-data {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-  float: center;
-  text-align: left;
-  
+.modal-cancel-button {
+  background-color: #ccc;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: left;
+  margin-right: 10px; /* Adjust margin as needed */
 }
-.loading-spinner {
-  display: flex;
-  justify-content: center;
+.form-group {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
   align-items: center;
-  height: 100px;
 }
 
-.spinner {
-  border: 4px solid rgba(66, 185, 131, 0.2);
-  border-top: 4px solid #42b983; /* Greenish color */
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
+/* Adjust the styles for the input field, label, and error message as needed */
+.form-group label {
+  margin: 0;
+  grid-column: 1;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.form-group input {
+  grid-column: 2;
+  width: 100%;
+  border: 2px solid #ccc; /* Add a border */
+  padding: 8px; /* Add some padding for better spacing */
+  border-radius: 4px; /* Add rounded corners */
 }
 
 
-
+.error-message {
+  grid-column: span 2; /* Span both columns */
+  color: #f44336;
+  font-size: 14px;
+  margin-top: 5px;
+}
 </style>

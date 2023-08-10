@@ -135,6 +135,10 @@ const handleStartSession = async (sessionName: string) => {
     isTracking.value = true;
   };
 
+const handleCloseModal =  () => {
+    showSessionModal.value = false;
+  };
+
 
 
 
@@ -151,9 +155,8 @@ const handleStartSession = async (sessionName: string) => {
   </div>
   <!-- <Teleport to="body"> -->
     <!-- use the modal component, pass in the prop -->
-    <Modal :show="showSessionModal" @start-session="handleStartSession">
+    <Modal :show="showSessionModal" @start-session="handleStartSession" @cancel-session="handleCloseModal">
       <template #header>
-        <h3>custom header</h3>
       </template>
     </Modal>
   <!-- </Teleport> -->

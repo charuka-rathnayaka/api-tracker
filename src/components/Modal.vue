@@ -17,7 +17,6 @@ const startSession = () => {
     isPopoverVisible.value = true;
     return; // Don't proceed if validation fails
   }
-
   // Emit the sessionName to the parent component
   emit('start-session', sessionName.value);
 };

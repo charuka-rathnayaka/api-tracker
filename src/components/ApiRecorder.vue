@@ -1,12 +1,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch ,onMounted,provide } from 'vue';
-// import axios from 'axios';
 import Modal from './Modal.vue';
 
-onMounted(() => {
-  console.log("component is created")
-});
 const props = defineProps<{
   isRunning: boolean,
   axiosInstance: any,
@@ -16,7 +12,7 @@ const props = defineProps<{
 
 // Declare a variable to hold the jsonSchema
 let jsonSchema: any;
-console.log("published library")
+
 // Initialize the tracking status as false
 const isTracking = ref(false);
 const showSessionModal = ref(false);
@@ -25,17 +21,13 @@ const localSessionName = ref('');
 // Function to toggle the tracking status
 const toggleTracking = () => {
   isTracking.value = !isTracking.value;
-  
 };
 
 const showModal = () => {
-  console.log("showModal", showSessionModal.value)
   if(isTracking.value==false){
     showSessionModal.value = true;
-    console.log("if", showSessionModal.value)
   }else{
     isTracking.value = false;
-    console.log("else", showSessionModal.value)
   }
 };
 
@@ -65,28 +57,22 @@ function clearAndGenerateSchema(jsonObject: Record<string, any>): Record<string,
 props.axiosInstance.interceptors.request.use(
   
   async (config: any) => {
-    console.log("axios.interceptors")
     
     // Execute the interceptor logic only when isTracking is true
     if (isTracking.value && config.url) {
-      console.log("Request is being sent:", config.method?.toUpperCase(), config.url);
-      console.log("Request data:", config.data); // requestBody
-      // const excluded_endpoints = ['http://localhost:3000/test', 'https://api64.ipify.org?format=json'];
-      const excluded_endpoints = ['http://localhost:3000/test'];
+      const excluded_endpoints = ['http://localhost:3000/test', 'https://api64.ipify.org?format=json'];
+      // const excluded_endpoints = ['http://localhost:3000/test'];
 
       // Regular expression to match URLs with IDs at the end
       const idPattern = /\/[a-f\d]{24}$/i; // Assuming IDs are 24 characters hexadecimal
       
       const possibleId = config.url?config.url.split("/").pop():"";
-      // console.log("possible ", possibleId, possibleId.match(idPattern));
       
       if (!excluded_endpoints.includes(config.url?config.url:"")) {
-        console.log("calling interceptor");
         
         if (config.url.match(idPattern)) {
           // URL contains an ID, remove it
           var baseUrl = config.url.replace(idPattern, '');
-          console.log("base id ", baseUrl);
           baseUrl += "/:id"
 
           if (config.data) {
@@ -98,7 +84,6 @@ props.axiosInstance.interceptors.request.use(
             return config;
           }
         } else {
-          console.log("base no id ", config.url);
           // URL does not contain an ID
           if (config.data) {
             jsonSchema = clearAndGenerateSchema(config.data);
@@ -128,7 +113,6 @@ const buttonText = computed(() => {
 });
 
 const handleStartSession = async (sessionName: string) => {
-    console.log('Starting session with name:', sessionName);
     localSessionName.value = sessionName;
     await props.changePaqObject(['setUserId', sessionName]);
     showSessionModal.value = false;
@@ -138,9 +122,6 @@ const handleStartSession = async (sessionName: string) => {
 const handleCloseModal =  () => {
     showSessionModal.value = false;
   };
-
-
-
 
 </script>
 
